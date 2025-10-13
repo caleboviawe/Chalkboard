@@ -23,34 +23,48 @@ hr{
   border: 0.5px solid rgb(144, 147, 146);
 }
 
+button{
+  font-family: 'Chalkduster', sans-serif;  
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #555656;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  transition-duration: 0.4s;
+}
+
 /*** Content Components ***/
 .header{
   display: flex;
   justify-content: center;
-  text-shadow: 0 0 65px rgb(250, 244, 244);
+  text-shadow: 
+    0 0 65px rgb(250, 244, 244),
+    2px 2px 0 #000,
+    4px 4px 0 #444,   
+    6px 6px 0 #666;
   font-size: 21px;
+  cursor: pointer;
 }
 
-/* .chalkboard {
-  flex: 1;
-  display: flex;  
-  justify-content: center;  
-  background-color: #2f3e2f;
-  padding: 30px;
-  border: 15px solid rgb(113, 90, 90);
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  text-shadow: 0 0 10px rgba(244, 237, 237, 0.3);
-} */
+.header > h1 {
+  transition: all 0.3s ease;
+}
 
 .chalkboard {
   flex: 1;
+  flex-direction: column;
   display: flex;
   align-items: center;               
   justify-content: center;          
   background-color: #2f3e2f;         
   padding: 40px;
-  border: 10px solid rgb(113, 90, 90);
+  border: 15px solid rgb(113, 90, 90);
   border-radius: 5px;
   box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
   text-shadow: 0 0 10px rgba(244, 237, 237, 0.3);
@@ -70,10 +84,50 @@ hr{
   position: fixed;
   width: 100%;
 }
+/* Welcome Display*/
+.welcome-title {
+  text-align: center;
+  color: #fffa65;
+  margin-bottom: 10px;
+}
+.welcome-subtitle {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #f8f8f8;
+}
+.welcome-input-field {
+  font-family: 'Chalkduster', sans-serif;  
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 60%;
+  max-width: 300px;
+  text-align: center;
+}
+/**/
 
-/*** Dynamic Functionality (Pseudo-classes) ***/
-/* .chalkboard:hover {
-  transform: scale(1.01);
-  box-shadow: inset 0 0 25px rgba(255,255,255,0.15),
-              0 6px 16px rgba(0,0,0,0.4);
-} */
+/********** Dynamic Functionality (Pseudo-classes) ************/
+.header > h1:hover {
+  transform: scale(1.2) rotateX(10deg) rotateY(10deg);
+  text-shadow: 
+    4px 4px 0 #000,
+    8px 8px 0 #444,
+    12px 12px 0 #666;
+  color: #fffa65;
+}
+
+button:hover{
+  background-color: #fffa65;
+  color: black;
+}
+
+button:active{
+  background-color: #3e8e41;
+  color: #f8f8f8;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
