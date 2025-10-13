@@ -3,57 +3,75 @@
   src: url('fonts/Chalkduster.ttf') format('truetype');
 }
 
+/*** Tag Styling ***/
 body {
   font-family: 'Chalkduster', sans-serif;
   margin: 0; 
   padding: 0;
   background-color: rgb(55, 53, 62);
-  /* background-color: white; */
+  color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;           
 }
 
 hr{
-  width: 80%;
-  border: 1.0px solid rgb(211, 218, 217);
+  width: 55%;
+  border: 0.5px solid rgb(144, 147, 146);
 }
 
+/*** Content Components ***/
 .header{
-    display: flex;
-    justify-content: center;
-    padding-bottom: 10px;
-    color: white;
+  display: flex;
+  justify-content: center;
+  text-shadow: 0 0 25px rgb(250, 244, 244);
+  font-size: 20px;
 }
 
 /* .chalkboard {
-  font-family: 'Schoolbell', cursive;
-  background: #2f3e2f;
-  color: #f8f8f8;
-  padding: 20px;
-} */
-
-/* .chalkboard {
-  background: rgb(68, 68, 78);
-  color: #f8f8f8;
+  flex: 1;
+  display: flex;  
+  justify-content: center;  
+  background-color: #2f3e2f;
   padding: 30px;
-  border: 3px solid #eee;
-  box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
+  border: 15px solid rgb(113, 90, 90);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-shadow: 0 0 10px rgba(244, 237, 237, 0.3);
 } */
 
 .chalkboard {
-  background: #2f3e2f;
-  color: #fafafa;
-  font-family: 'Chalkduster', sans-serif;
-  padding: 30px;
-  border: 13px solid rgb(113, 90, 90);
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
-  text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+  flex: 1;
+  display: flex;
+  align-items: center;               
+  justify-content: center;          
+  background-color: #2f3e2f;         
+  padding: 40px;
+  border: 10px solid rgb(113, 90, 90);
+  border-radius: 12px;
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
+  text-shadow: 0 0 10px rgba(244, 237, 237, 0.3);
+
+  width: 100%;                        /* responsive width */
+  max-width: 1200px;                  /* prevents stretching too far */
+  min-height: 550px;                 /* room for your game UI */
+  gap: 20px;                         /* space between future elements */
+  margin: 20px auto;                
+  box-sizing: border-box;
+  transition: all 0.3s ease;         /* smooth resizing later */
 }
 
-/*Footer*/
 .footer {
   text-align: center;
-  /* border-top: rgb(44, 42, 42) 1px solid; */
-  color: white;
   bottom: 0;
   position: fixed;
   width: 100%;
 }
+
+/*** Dynamic Functionality (Pseudo-classes) ***/
+/* .chalkboard:hover {
+  transform: scale(1.01);
+  box-shadow: inset 0 0 25px rgba(255,255,255,0.15),
+              0 6px 16px rgba(0,0,0,0.4);
+} */
