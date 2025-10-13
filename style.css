@@ -13,7 +13,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;           
+  align-items: center;  
+  background-image: url(images/questions_and_exclamation_marks_background.png);
+  background-position: center center;         
 }
 
 hr{
@@ -25,8 +27,8 @@ hr{
 .header{
   display: flex;
   justify-content: center;
-  text-shadow: 0 0 25px rgb(250, 244, 244);
-  font-size: 20px;
+  text-shadow: 0 0 65px rgb(250, 244, 244);
+  font-size: 21px;
 }
 
 /* .chalkboard {
@@ -49,13 +51,13 @@ hr{
   background-color: #2f3e2f;         
   padding: 40px;
   border: 10px solid rgb(113, 90, 90);
-  border-radius: 12px;
+  border-radius: 5px;
   box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
   text-shadow: 0 0 10px rgba(244, 237, 237, 0.3);
 
   width: 100%;                        /* responsive width */
-  max-width: 1200px;                  /* prevents stretching too far */
-  min-height: 550px;                 /* room for your game UI */
+  max-width: 1250px;                  /* prevents stretching too far */
+  min-height: 580px;                 /* room for your game UI */
   gap: 20px;                         /* space between future elements */
   margin: 20px auto;                
   box-sizing: border-box;
