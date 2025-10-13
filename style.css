@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'Chalkduster';
+  src: url('fonts/Chalkduster.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Chalkduster', sans-serif;
+  margin: 0; 
+  padding: 0;
+  background-color: rgb(55, 53, 62);
+  /* background-color: white; */
+}
+
+hr{
+  width: 80%;
+  border: 1.0px solid rgb(211, 218, 217);
+}
+
+.header{
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+    color: white;
+}
+
+/* .chalkboard {
+  font-family: 'Schoolbell', cursive;
+  background: #2f3e2f;
+  color: #f8f8f8;
+  padding: 20px;
+} */
+
+/* .chalkboard {
+  background: rgb(68, 68, 78);
+  color: #f8f8f8;
+  padding: 30px;
+  border: 3px solid #eee;
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
+} */
+
+.chalkboard {
+  background: #2f3e2f;
+  color: #fafafa;
+  font-family: 'Chalkduster', sans-serif;
+  padding: 30px;
+  border: 13px solid rgb(113, 90, 90);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/*Footer*/
+.footer {
+  text-align: center;
+  /* border-top: rgb(44, 42, 42) 1px solid; */
+  color: white;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+}
