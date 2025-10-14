@@ -32,7 +32,7 @@ class Quiz {
   }
 
   async fetchQuestions() {
-    const url = `https://opentdb.com/api.php?amount=15&difficulty=${this.user.difficulty}&type=multiple`;
+    const url = `https://opentdb.com/api.php?amount=15&difficulty=${this.user.difficulty}`;
     const response = await fetch(url);
     const data = await response.json();
     this.questions = data.results.map(
