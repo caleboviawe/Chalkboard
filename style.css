@@ -3,7 +3,7 @@
   src: url('fonts/Chalkduster.ttf') format('truetype');
 }
 
-/*** Tag Styling ***/
+/************ Tag Styling ************/
 body {
   font-family: 'Chalkduster', sans-serif;
   margin: 0; 
@@ -27,7 +27,7 @@ button{
   font-family: 'Chalkduster', sans-serif;  
   display: inline-block;
   padding: 15px 25px;
-  font-size: 16px;
+  font-size: 13.5px;
   cursor: pointer;
   text-decoration: none;
   outline: none;
@@ -39,7 +39,7 @@ button{
   transition-duration: 0.4s;
 }
 
-/*** Content Components ***/
+/************ Content Components ************/
 .header{
   display: flex;
   justify-content: center;
@@ -73,7 +73,7 @@ button{
   max-width: 1250px;                  /* prevents stretching too far */
   min-height: 580px;                 /* room for your game UI */
   gap: 20px;                         /* space between future elements */
-  margin: 20px auto;                
+  margin: 10px auto;                
   box-sizing: border-box;
   transition: all 0.3s ease;         /* smooth resizing later */
 }
@@ -81,20 +81,12 @@ button{
 .footer {
   text-align: center;
   bottom: 0;
-  position: fixed;
   width: 100%;
 }
-/* Welcome Display*/
-.welcome-title {
+/* Welcome Display */
+.welcome-title, .welcome-subtitle {
   text-align: center;
-  color: #fffa65;
   margin-bottom: 10px;
-}
-.welcome-subtitle {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 20px;
-  color: #f8f8f8;
 }
 .welcome-input-field {
   font-family: 'Chalkduster', sans-serif;  
@@ -108,9 +100,61 @@ button{
   max-width: 300px;
   text-align: center;
 }
-/**/
+/*8*/
 
-/********** Dynamic Functionality (Pseudo-classes) ************/
+/* Quiz Display */
+/* .quiz-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+} */
+
+/* .user-info p {
+  margin: 5px 15px;
+  color: #fffa65;
+  font-size: 16px;
+} */
+
+/* .difficulty-select {
+  margin-left: 10px;
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+} */
+
+/* .quiz-body {
+  text-align: center;
+  margin: 20px 0;
+} */
+
+/* .quiz-body .category {
+  font-size: 18px;
+  color: #f8f8f8;
+  margin-bottom: 10px;
+} */
+
+/* .quiz-body h3 {
+  color: #ffffff;
+  font-size: 22px;
+  margin: 0 auto;
+  width: 80%;
+  line-height: 1.4;
+} */
+
+/* .quiz-footer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+} */
+/***/
+
+/************ Dynamic Functionality (Pseudo-classes) ************/
 .header > h1:hover {
   transform: scale(1.2) rotateX(10deg) rotateY(10deg);
   text-shadow: 
