@@ -32,7 +32,7 @@ class Quiz {
   }
 
   async fetchQuestions() {
-    const url = `https://opentdb.com/api.php?amount=3&difficulty=${this.user.difficulty}&type=multiple`;
+    const url = `https://opentdb.com/api.php?amount=15&difficulty=${this.user.difficulty}&type=multiple`;
     const response = await fetch(url);
     const data = await response.json();
     this.questions = data.results.map(
@@ -110,21 +110,25 @@ async function renderQuizPage() {
     // Clear the chalkboard
     chalkboard.innerHTML = `
       <div class="quiz-header">
-        <p><strong>User:</strong> <span id="displayUsername">${currentUser.name}</span></p>
-        <p><strong>Difficulty:</strong>
-          <span id="displayDifficulty">${currentUser.difficulty}</span>
-          <select id="changeDifficulty" class="difficulty-select">
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-        </p>
-        <p><strong>Score:</strong> <span id="displayScore">${currentUser.score}</span></p>
+        <div class="left-section">
+            <p>User: <span id="displayUsername">${currentUser.name}</span></p>
+            <p>Score: <span id="displayScore">${currentUser.score}</span></p>
+        </div>
+        <div>
+            <p>Difficulty:
+            <span id="displayDifficulty">${currentUser.difficulty}</span>
+            <select id="changeDifficulty" class="difficulty-select">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            </p>
+        </div>
       </div>
 
       <div class="quiz-body">
-        <p class="category"><strong>The Category is </strong> <span id="questionCategory">Loading...</span></p>
-        <h3 id="questionText">Fetching question...</h3>
+        <h3 class="category">The Category is <span id="questionCategory">Loading...</span></h3>
+        <p id="questionText" style="font-size:20px">Fetching question...</p>
         <div id="choicesContainer" class="choices"></div>
       </div>
 
@@ -165,7 +169,7 @@ async function renderQuizPage() {
 // --- Helper Functions ---
 function renderQuestion(question) {
   if (!question) {
-    chalkboard.innerHTML = `<h2>Quiz Complete! Thanks for playing!</h2>
+    chalkboard.innerHTML = `<h2 style="text-align:center">Quiz Complete! Thanks for playing!</h2>
       <p>Your final score: ${currentUser.score}</p>
       <button class="btn" onclick="renderHomePage()">Play Again</button>`;
     return;
@@ -232,7 +236,6 @@ async function handleDifficultyChange(newDifficulty) {
     alert("Failed to fetch new questions. Try again later.");
   }
 }
-
 
 // --- Initialize app ---
 renderHomePage();
