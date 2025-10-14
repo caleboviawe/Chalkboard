@@ -114,9 +114,11 @@ async function renderQuizPage() {
             <p>User: <span id="displayUsername">${currentUser.name}</span></p>
             <p>Score: <span id="displayScore">${currentUser.score}</span></p>
         </div>
-        <div>
+        <div class="right-section">
             <p>Difficulty:
             <span id="displayDifficulty">${currentUser.difficulty}</span>
+            </p>
+            <p>Update:
             <select id="changeDifficulty" class="difficulty-select">
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -210,12 +212,12 @@ function handleSubmit() {
 
   document.getElementById("displayScore").textContent = currentUser.score;
 
-  selectedBtn.style.backgroundColor = isCorrect ? "green" : "red";
+  selectedBtn.style.backgroundColor = isCorrect ? "#44ea44" : "red";
 
   if (!isCorrect) {
     const correctBtn = Array.from(document.querySelectorAll(".choice-btn"))
       .find(btn => btn.textContent === currentQuestion.correct);
-    if (correctBtn) correctBtn.style.backgroundColor = "green";
+    if (correctBtn) correctBtn.style.backgroundColor = "#44ea44";
   }
 }
 
