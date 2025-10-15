@@ -1,15 +1,33 @@
 // --- Defining Classes ---
+// class User {
+//   constructor(name) {
+//     this.name = name;
+//     this.difficulty = difficulty;
+//     this.score = 0;
+//   }
+
+//   updateScore(isCorrect) {
+//     if (isCorrect) this.score++;
+//   }
+// }
+
 class User {
   constructor(name) {
     this.name = name;
     this.difficulty = difficulty;
     this.score = 0;
+    this.scoreHistory = []; // Track progress
   }
 
-  updateScore(isCorrect) {
+  updateScore(isCorrect, questionText) {
     if (isCorrect) this.score++;
+    this.scoreHistory.push({
+      question: questionText,
+      result: isCorrect ? "✅ Correct" : "❌ Incorrect",
+    });
   }
 }
+
 
 class Question {
   constructor(category, question, correct_answer, incorrect_answers) {
@@ -32,7 +50,7 @@ class Quiz {
   }
 
   async fetchQuestions() {
-    const url = `https://opentdb.com/api.php?amount=15&difficulty=${this.user.difficulty}`;
+    const url = `https://opentdb.com/api.php?amount=6&difficulty=${this.user.difficulty}`;
     const response = await fetch(url);
     const data = await response.json();
     this.questions = data.results.map(
@@ -167,13 +185,64 @@ async function renderQuizPage() {
   }
 }
 
+// -- End Page ---
+function renderEndPage() {
+  chalkboard.innerHTML = `
+    <div class="end-screen">
+      <h1 style="text-align:center">Quiz complete! Thanks for playing!</h1>
+      <h2>Your final score: ${currentUser.score}</h2>
+      <table class="score-table">
+        <thead>
+        <tr>
+            <th>Question</th>
+            <th>Result</th>
+        </tr>
+        </thead>
+      <tbody id="scoreHistoryBody"></tbody>
+     </table>
+      <button class="btn" onclick="renderHomePage()">Play Again</button>
+    </div>
+  `;
+
+  const historyBody = document.getElementById("scoreHistoryBody");
+  currentUser.scoreHistory.forEach(entry => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${entry.question}</td>
+      <td>${entry.result}</td>
+    `;
+    historyBody.appendChild(row);
+  });
+}
+
 
 // --- Helper Functions ---
+// function renderQuestion(question) {
+//   if (!question) {
+//     chalkboard.innerHTML = `<h2 style="text-align:center">Quiz Complete! Thanks for playing!</h2>
+//       <p>Your final score: ${currentUser.score}</p>
+//       <button class="btn" onclick="renderHomePage()">Play Again</button>`;
+//     return;
+//   }
+
+//   document.getElementById("questionCategory").textContent = question.category;
+//   document.getElementById("questionText").innerHTML = question.text;
+
+//   const container = document.getElementById("choicesContainer");
+//   container.innerHTML = "";
+
+//   question.options.forEach(option => {
+//     const btn = document.createElement("button");
+//     btn.textContent = option;
+//     btn.className = "btn choice-btn";
+//     btn.addEventListener("click", () => selectAnswer.apply(question, [option])); // using apply()
+//     container.appendChild(btn);
+//   });
+// }
+
 function renderQuestion(question) {
   if (!question) {
-    chalkboard.innerHTML = `<h2 style="text-align:center">Quiz Complete! Thanks for playing!</h2>
-      <p>Your final score: ${currentUser.score}</p>
-      <button class="btn" onclick="renderHomePage()">Play Again</button>`;
+    renderEndPage();
     return;
   }
 
@@ -187,7 +256,7 @@ function renderQuestion(question) {
     const btn = document.createElement("button");
     btn.textContent = option;
     btn.className = "btn choice-btn";
-    btn.addEventListener("click", () => selectAnswer.apply(question, [option])); // using apply()
+    btn.addEventListener("click", () => selectAnswer.apply(question, [option])); // Using apply()
     container.appendChild(btn);
   });
 }
@@ -208,7 +277,8 @@ function handleSubmit() {
 
   const userAnswer = selectedBtn.textContent;
   const isCorrect = currentQuestion.checkAnswer(userAnswer);
-  currentUser.updateScore(isCorrect);
+//   currentUser.updateScore(isCorrect);
+  currentUser.updateScore(isCorrect, currentQuestion.text);
 
   document.getElementById("displayScore").textContent = currentUser.score;
 
@@ -219,6 +289,7 @@ function handleSubmit() {
       .find(btn => btn.textContent === currentQuestion.correct);
     if (correctBtn) correctBtn.style.backgroundColor = "#44ea44";
   }
+  document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
 }
 
 function handleNextQuestion() {
