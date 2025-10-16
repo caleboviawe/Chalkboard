@@ -66,6 +66,7 @@ class Quiz {
   }
 }
 
+// --- Global Variables ---
 // Grab chalkboard div
 const chalkboard = document.getElementById('chalkboard');
 
@@ -78,6 +79,7 @@ let incorrectStreak = 0;
 
 // --- Initial Homepage ---
 function renderHomePage() {
+  // Update the chalkboard display  
   chalkboard.innerHTML = `
     <h1 class="welcome-title" style="color:#fffa65">Welcome to ChalkBoard!</h1>
     <h2 class="welcome-subtitle">Test your knowledge on various topics ranging from Math and Geography, to Sports and Pop Culture.</h2>
@@ -120,7 +122,7 @@ function renderHomePage() {
 // --- Quiz Page ---
 async function renderQuizPage() {
   try {
-    // Clear the chalkboard
+    // Update the chalkboard display
     chalkboard.innerHTML = `
       <div class="quiz-header">
         <div class="left-section">
@@ -133,6 +135,7 @@ async function renderQuizPage() {
             </p>
             <p>Update:
             <select id="changeDifficulty" class="difficulty-select">
+                <option value="" disabled selected>Select difficulty</option>
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
@@ -159,10 +162,10 @@ async function renderQuizPage() {
     currentQuiz.start();
     currentQuestion = currentQuiz.nextQuestion();
 
-    // Display first question
+    // Display the question
     renderQuestion(currentQuestion);
 
-    // Handle difficulty change from the user
+    // Handle manual difficulty change from the user
     document.getElementById("changeDifficulty").addEventListener("change", async (e) => { 
       const newDiff = e.target.value;
       currentUser.difficulty = newDiff;
@@ -173,8 +176,8 @@ async function renderQuizPage() {
     });
 
     // Set up button actions
-    document.getElementById("submitBtn").addEventListener("click", handleSubmit.bind(currentQuiz));
-    document.getElementById("nextBtn").addEventListener("click", handleNextQuestion.bind(currentQuiz));
+    document.getElementById("submitBtn").addEventListener("click", handleSubmit.bind(currentQuiz)); // using bind()
+    document.getElementById("nextBtn").addEventListener("click", handleNextQuestion.bind(currentQuiz)); // using bind()
 
   } catch (error) {
     console.error("Error initializing quiz:", error);
@@ -184,6 +187,7 @@ async function renderQuizPage() {
 
 // -- End Page ---
 function renderEndPage() {
+  // Update the chalkboard display  
   chalkboard.innerHTML = `
     <div class="end-screen">
       <h1 style="text-align:center">Quiz complete! Thanks for playing!</h1>
@@ -204,6 +208,7 @@ function renderEndPage() {
     </div>
   `;
 
+  // Constructing the score history table
   const historyBody = document.getElementById("scoreHistoryBody");
   currentUser.scoreHistory.forEach(entry => {
     const row = document.createElement("tr");
@@ -220,24 +225,28 @@ function renderEndPage() {
 
 // -- Helper Functions
 function renderQuestion(question) {
+  // Load the end page if there isn't a question to display  
   if (!question) {
     renderEndPage();
     return;
   }
 
+  // Load in the question category and text
   document.getElementById("questionCategory").textContent = question.category;
   document.getElementById("questionText").innerHTML = question.text;
 
   console.log("Current question difficulty:", question.difficulty);
 
+  // Clearing the old choice container
   const container = document.getElementById("choicesContainer");
   container.innerHTML = "";
 
+  // Mapping out the answers for the new question
   question.options.forEach(option => {
     const btn = document.createElement("button");
     btn.textContent = option;
     btn.className = "btn choice-btn";
-    btn.addEventListener("click", () => selectAnswer.apply(question, [option])); // Using apply()
+    btn.addEventListener("click", () => selectAnswer.apply(question, [option])); // using apply()
     container.appendChild(btn);
   });
 }
@@ -250,22 +259,24 @@ function selectAnswer(selectedOption) {
 }
 
 function handleSubmit() {
+  // Referencing other buttons  
   const submitBtn = document.getElementById("submitBtn");
   const selectedBtn = document.querySelector(".choice-btn.selected");
+
+  // Error Handling
   if (!selectedBtn) {
     alert("Please select an answer before submitting!");
     return;
   }
 
+  // Evaluate the answer
   const userAnswer = selectedBtn.textContent;
   const isCorrect = currentQuestion.checkAnswer(userAnswer);
-//   currentUser.updateScore(isCorrect);
   currentUser.updateScore(isCorrect, userAnswer, currentQuestion.category, currentQuestion.text, currentQuestion.difficulty);
-
   document.getElementById("displayScore").textContent = currentUser.score;
-
   selectedBtn.style.backgroundColor = isCorrect ? "#44ea44" : "red";
 
+  // Handling the answer evaluation
   if (!isCorrect) {
     handleIncorrect();
     const correctBtn = Array.from(document.querySelectorAll(".choice-btn"))
@@ -275,13 +286,18 @@ function handleSubmit() {
   else {
     handleCorrect()
   }
+
+  // Update button states
   document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
   submitBtn.disabled = true;
 }
 
 function handleNextQuestion() {
+  // Referencing other buttons  
   const submitBtn = document.getElementById("submitBtn");
   const selectedBtn = document.querySelector(".choice-btn.selected");
+
+  // Error Handling
   if (!(submitBtn.disabled == true)) {
     if (!selectedBtn){
         alert("Please submit an answer to this question. Never hurts to take a guess! :)");
@@ -290,7 +306,10 @@ function handleNextQuestion() {
     alert("Please submit your answer first before proceeding.");
     return;
   }
+
+  //Update submit button state
   submitBtn.disabled = false;
+
   currentQuestion = currentQuiz.nextQuestion();
   renderQuestion(currentQuestion);
 }
@@ -300,13 +319,17 @@ async function handleCorrect(){
     correctStreak++;
     console.log("Correct streak is", correctStreak);
     var newDiff = null;
-    if (incorrectStreak == 5 && currentUser.difficulty != 'hard'){
-        incorrectStreak = 0;
+
+    // Check if the user has correctly answered 5 questions in a row, and make needed difficulty adjustments
+    if (correctStreak == 5 && currentUser.difficulty != 'hard'){
+        correctStreak = 0;
         if (currentUser.difficulty == 'easy'){newDiff = 'medium'}
         if (currentUser.difficulty == 'medium'){newDiff = 'hard'}
         document.getElementById("displayDifficulty").textContent = newDiff;
         await handleDifficultyChange.call(currentQuiz, newDiff); // using call()
     }
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = false;
 }
 
 async function handleIncorrect(){
@@ -314,6 +337,8 @@ async function handleIncorrect(){
     incorrectStreak++;
     console.log("Incorrect streak is", incorrectStreak);
     var newDiff = null;
+
+    // Check if the user has missed 5 questions in a row, and make needed difficulty adjustments
     if (incorrectStreak == 5 && currentUser.difficulty != 'easy'){
         incorrectStreak = 0;
         if (currentUser.difficulty == 'medium'){newDiff = 'easy'}
@@ -321,6 +346,8 @@ async function handleIncorrect(){
         document.getElementById("displayDifficulty").textContent = newDiff;
         await handleDifficultyChange.call(currentQuiz, newDiff); // using call()
     }
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = false;
 }
 
 async function handleDifficultyChange(newDifficulty) {
