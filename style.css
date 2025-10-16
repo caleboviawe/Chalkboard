@@ -251,4 +251,8 @@ button:active{
     gap: 8px;
     font-size: 14px;
   }
+
+  .end-screen{
+    font-size: 10px;
+  }
 }

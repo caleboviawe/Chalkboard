@@ -4,9 +4,7 @@ class User {
     this.name = name;
     this.difficulty = difficulty;
     this.score = 0;
-    // this.correctStreak = 0;
-    // this.incorrectStreak = 0;
-    this.scoreHistory = []; // Track progress
+    this.scoreHistory = [];
   }
 
   updateScore(isCorrect, userAnswer, questionCategory, questionText, questionDifficulty) {
@@ -252,6 +250,7 @@ function selectAnswer(selectedOption) {
 }
 
 function handleSubmit() {
+  const submitBtn = document.getElementById("submitBtn");
   const selectedBtn = document.querySelector(".choice-btn.selected");
   if (!selectedBtn) {
     alert("Please select an answer before submitting!");
@@ -277,9 +276,21 @@ function handleSubmit() {
     handleCorrect()
   }
   document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
+  submitBtn.disabled = true;
 }
 
 function handleNextQuestion() {
+  const submitBtn = document.getElementById("submitBtn");
+  const selectedBtn = document.querySelector(".choice-btn.selected");
+  if (!(submitBtn.disabled == true)) {
+    if (!selectedBtn){
+        alert("Please submit an answer to this question. Never hurts to take a guess! :)");
+        return;
+    }
+    alert("Please submit your answer first before proceeding.");
+    return;
+  }
+  submitBtn.disabled = false;
   currentQuestion = currentQuiz.nextQuestion();
   renderQuestion(currentQuestion);
 }
