@@ -1,21 +1,11 @@
 // --- Defining Classes ---
-// class User {
-//   constructor(name) {
-//     this.name = name;
-//     this.difficulty = difficulty;
-//     this.score = 0;
-//   }
-
-//   updateScore(isCorrect) {
-//     if (isCorrect) this.score++;
-//   }
-// }
-
 class User {
   constructor(name) {
     this.name = name;
     this.difficulty = difficulty;
     this.score = 0;
+    // this.correctStreak = 0;
+    // this.incorrectStreak = 0;
     this.scoreHistory = []; // Track progress
   }
 
@@ -53,7 +43,7 @@ class Quiz {
   }
 
   async fetchQuestions() {
-    const url = `https://opentdb.com/api.php?amount=7&difficulty=${this.user.difficulty}`;
+    const url = `https://opentdb.com/api.php?amount=10&difficulty=${this.user.difficulty}`;
     const response = await fetch(url);
     const data = await response.json();
     this.questions = data.results.map(
@@ -83,6 +73,10 @@ const chalkboard = document.getElementById('chalkboard');
 
 // Store current user info globally for now
 let currentUser = null;
+
+// Keep track of the answer streaks
+let correctStreak = 0;
+let incorrectStreak = 0;
 
 // --- Initial Homepage ---
 function renderHomePage() {
@@ -170,10 +164,12 @@ async function renderQuizPage() {
     // Display first question
     renderQuestion(currentQuestion);
 
-    // Handle difficulty change dynamically
-    document.getElementById("changeDifficulty").addEventListener("change", async (e) => {
+    // Handle difficulty change from the user
+    document.getElementById("changeDifficulty").addEventListener("change", async (e) => { 
       const newDiff = e.target.value;
       currentUser.difficulty = newDiff;
+      correctStreak = 0;
+      incorrectStreak = 0;
       document.getElementById("displayDifficulty").textContent = newDiff;
       await handleDifficultyChange.call(currentQuiz, newDiff); // using call()
     });
@@ -234,6 +230,8 @@ function renderQuestion(question) {
   document.getElementById("questionCategory").textContent = question.category;
   document.getElementById("questionText").innerHTML = question.text;
 
+  console.log("Current question difficulty:", question.difficulty);
+
   const container = document.getElementById("choicesContainer");
   container.innerHTML = "";
 
@@ -270,9 +268,13 @@ function handleSubmit() {
   selectedBtn.style.backgroundColor = isCorrect ? "#44ea44" : "red";
 
   if (!isCorrect) {
+    handleIncorrect();
     const correctBtn = Array.from(document.querySelectorAll(".choice-btn"))
       .find(btn => btn.textContent === currentQuestion.correct);
     if (correctBtn) correctBtn.style.backgroundColor = "#44ea44";
+  }
+  else {
+    handleCorrect()
   }
   document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
 }
@@ -280,6 +282,34 @@ function handleSubmit() {
 function handleNextQuestion() {
   currentQuestion = currentQuiz.nextQuestion();
   renderQuestion(currentQuestion);
+}
+
+async function handleCorrect(){
+    incorrectStreak = 0;
+    correctStreak++;
+    console.log("Correct streak is", correctStreak);
+    var newDiff = null;
+    if (incorrectStreak == 5 && currentUser.difficulty != 'hard'){
+        incorrectStreak = 0;
+        if (currentUser.difficulty == 'easy'){newDiff = 'medium'}
+        if (currentUser.difficulty == 'medium'){newDiff = 'hard'}
+        document.getElementById("displayDifficulty").textContent = newDiff;
+        await handleDifficultyChange.call(currentQuiz, newDiff); // using call()
+    }
+}
+
+async function handleIncorrect(){
+    correctStreak = 0;
+    incorrectStreak++;
+    console.log("Incorrect streak is", incorrectStreak);
+    var newDiff = null;
+    if (incorrectStreak == 5 && currentUser.difficulty != 'easy'){
+        incorrectStreak = 0;
+        if (currentUser.difficulty == 'medium'){newDiff = 'easy'}
+        if (currentUser.difficulty == 'hard'){newDiff = 'medium'}
+        document.getElementById("displayDifficulty").textContent = newDiff;
+        await handleDifficultyChange.call(currentQuiz, newDiff); // using call()
+    }
 }
 
 async function handleDifficultyChange(newDifficulty) {
