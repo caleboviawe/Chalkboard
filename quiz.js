@@ -19,18 +19,21 @@ class User {
     this.scoreHistory = []; // Track progress
   }
 
-  updateScore(isCorrect, questionText) {
+  updateScore(isCorrect, userAnswer, questionCategory, questionText, questionDifficulty) {
     if (isCorrect) this.score++;
     this.scoreHistory.push({
+      category: questionCategory,
+      difficulty: questionDifficulty,  
       question: questionText,
+      answer: userAnswer,
       result: isCorrect ? "✅ Correct" : "❌ Incorrect",
     });
   }
 }
 
-
 class Question {
-  constructor(category, question, correct_answer, incorrect_answers) {
+  constructor(difficulty, category, question, correct_answer, incorrect_answers) {
+    this.difficulty = difficulty;
     this.category = category;
     this.text = question;
     this.correct = correct_answer;
@@ -50,11 +53,11 @@ class Quiz {
   }
 
   async fetchQuestions() {
-    const url = `https://opentdb.com/api.php?amount=6&difficulty=${this.user.difficulty}`;
+    const url = `https://opentdb.com/api.php?amount=7&difficulty=${this.user.difficulty}`;
     const response = await fetch(url);
     const data = await response.json();
     this.questions = data.results.map(
-      q => new Question(q.category, q.question, q.correct_answer, q.incorrect_answers)
+      q => new Question(q.difficulty, q.category, q.question, q.correct_answer, q.incorrect_answers)
     );
   }
 
@@ -117,7 +120,7 @@ function renderHomePage() {
     // For checking that the input is saved
     console.log("User info saved:", currentUser);
 
-    // Move to next quiz state
+    // Move to quiz state
     renderQuizPage()
   });
 }
@@ -194,7 +197,10 @@ function renderEndPage() {
       <table class="score-table">
         <thead>
         <tr>
+            <th>Category</th>
+            <th>Difficulty</th>
             <th>Question</th>
+            <th>Your Answer</th>
             <th>Result</th>
         </tr>
         </thead>
@@ -208,38 +214,17 @@ function renderEndPage() {
   currentUser.scoreHistory.forEach(entry => {
     const row = document.createElement("tr");
     row.innerHTML = `
+      <td>${entry.category}</td> 
+      <td>${entry.difficulty}</td> 
       <td>${entry.question}</td>
+      <td>${entry.answer}</td>
       <td>${entry.result}</td>
     `;
     historyBody.appendChild(row);
   });
 }
 
-
-// --- Helper Functions ---
-// function renderQuestion(question) {
-//   if (!question) {
-//     chalkboard.innerHTML = `<h2 style="text-align:center">Quiz Complete! Thanks for playing!</h2>
-//       <p>Your final score: ${currentUser.score}</p>
-//       <button class="btn" onclick="renderHomePage()">Play Again</button>`;
-//     return;
-//   }
-
-//   document.getElementById("questionCategory").textContent = question.category;
-//   document.getElementById("questionText").innerHTML = question.text;
-
-//   const container = document.getElementById("choicesContainer");
-//   container.innerHTML = "";
-
-//   question.options.forEach(option => {
-//     const btn = document.createElement("button");
-//     btn.textContent = option;
-//     btn.className = "btn choice-btn";
-//     btn.addEventListener("click", () => selectAnswer.apply(question, [option])); // using apply()
-//     container.appendChild(btn);
-//   });
-// }
-
+// -- Helper Functions
 function renderQuestion(question) {
   if (!question) {
     renderEndPage();
@@ -278,7 +263,7 @@ function handleSubmit() {
   const userAnswer = selectedBtn.textContent;
   const isCorrect = currentQuestion.checkAnswer(userAnswer);
 //   currentUser.updateScore(isCorrect);
-  currentUser.updateScore(isCorrect, currentQuestion.text);
+  currentUser.updateScore(isCorrect, userAnswer, currentQuestion.category, currentQuestion.text, currentQuestion.difficulty);
 
   document.getElementById("displayScore").textContent = currentUser.score;
 
